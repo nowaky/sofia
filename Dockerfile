@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
 RUN mise use -g node@23.11.1
 
 # ===== 构建阶段预装 PM2 =====
+# 使用 Mise 管理的 Node.js 安装最新版 PM2
 RUN mise exec node@23.11.1 -- npm install -g pm2 \
     && mise reshim \
     && mise exec node@23.11.1 -- pm2 -v
