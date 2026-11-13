@@ -15,8 +15,13 @@ RUN apt-get update && apt-get install -y \
     && sshpass -V \
     && rm -rf /var/lib/apt/lists/*
 
-# 构建镜像时预装 PM2
-RUN npm install -g pm2 && pm2 -v
+# ===== 初始化 Node.js 环境 =====
+RUN mise use -g node@23.11.1
+
+# ===== 构建阶段预装 PM2 =====
+RUN mise exec node@23.11.1 -- npm install -g pm2 \
+    && mise reshim \
+    && mise exec node@23.11.1 -- pm2 -v
 
 RUN rclone config -h
 
@@ -30,4 +35,3 @@ RUN sed -i 's/^start_baihu_server "\$@"$/sh \/restore.sh/' /app/docker-entrypoin
 
 RUN mise exec python@3.13.12 -- pip install requests
 RUN mise use -g python@3.13.12
-RUN mise use -g node@23.11.1
