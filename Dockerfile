@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
     && sshpass -V \
     && rm -rf /var/lib/apt/lists/*
 
+# 构建镜像时预装 PM2
+RUN npm install -g pm2 && pm2 -v
+
 RUN rclone config -h
 
 COPY ./restore.sh /
